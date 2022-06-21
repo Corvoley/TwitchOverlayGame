@@ -6,19 +6,18 @@ using TwitchLib.Client;
 using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 using TwitchBot.Commands;
+using System;
 
 public class TwitchConnection : MonoBehaviour
 {
     // Start is called before the first frame update
     private TwitchClient client;
     private ConnectionCredentials credentials;
-    void Awake()
-    {
-        credentials = new ConnectionCredentials(TwitchInfo.ChannelName, TwitchInfo.BotToken);        
- 
-    }
+    public static event Action<string, string> OnPlayerJoined;
+
     public void Connect(bool isLogging)
     {
+        credentials = new ConnectionCredentials(TwitchInfo.ChannelName, TwitchInfo.BotToken);
         client = new Client();
         client.Initialize(credentials, TwitchInfo.ChannelName);
 
@@ -41,19 +40,30 @@ public class TwitchConnection : MonoBehaviour
         {
             if (item.CommandName == e.Command.CommandText.ToLower())
             {
-                var name = e.Command.ChatMessage.Username;
-                var arg = e.Command.ArgumentsAsString;
-                item.CallFunction(name, arg);
-                client.SendMessage(TwitchInfo.ChannelName, item.GetMessage(name, arg));
-                Debug.Log("debugado");
+                var id = e.Command.ChatMessage.UserId;
+                var name = e.Command.ChatMessage.Username;                 
+                var args = e.Command.ArgumentsAsString;
+                CommandParametersHandler.param = id;
+                CommandParametersHandler.param2 = name;
+                CommandParametersHandler.param3 = args;
+                item.CallFunction();
+                Debug.Log("Comando Chamado");
+               
 
+
+                client.SendMessage(TwitchInfo.ChannelName, item.GetMessage(id, name, args));
+               
             }
         }
     }
 
     private void Client_OnMessageReceived(object? sender, OnMessageReceivedArgs e)
     {
-
+        if (!PlayerManager.playerList.Exists(x => x.id == e.ChatMessage.UserId))
+        {
+            OnPlayerJoined?.Invoke(e.ChatMessage.UserId, e.ChatMessage.Username);
+            Debug.Log("aaa");
+        }
     }
 
     private void Client_OnError(object? sender, TwitchLib.Communication.Events.OnErrorEventArgs e)
@@ -71,8 +81,5 @@ public class TwitchConnection : MonoBehaviour
         client.Disconnect();
     }
    
-    void Update()
-    {
-        
-    }
+
 }
