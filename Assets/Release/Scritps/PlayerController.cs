@@ -2,36 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
     private NavMeshAgent agent;
-    [SerializeField] private Point point;
-    [SerializeField] public float radius;
+    [SerializeField] private Point pointToFollow;    
+    [SerializeField] private float timeToMove = 2f;
+    [SerializeField] private TextMeshProUGUI nameText;
+    public Player player { get; set; }    
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        pointToFollow = GameObject.Find("Point").GetComponent<Point>();
     }
     private void Start()
     {
+        nameText.text = player.name;
         StartCoroutine(StartWalk());
     }
     private IEnumerator StartWalk()
     {
         while (true)
         {
-            agent.SetDestination(point.RandomPointOnCircleEdge());
+            agent.SetDestination(pointToFollow.RandomPointOnCircleEdge());
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(timeToMove);
         }
     }
-#if UNITY_EDITOR
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, radius);
-    }
-
-#endif
 }

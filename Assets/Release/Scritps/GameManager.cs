@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {        
+        Application.runInBackground = true; 
         var buy = new BuyItem("buyitem");
         CommandList.commands.Add(buy);
         var join = new Join("join");
