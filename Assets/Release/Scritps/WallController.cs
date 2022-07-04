@@ -3,18 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallController : MonoBehaviour
+public class WallController : MonoBehaviour, IDamageable
 {
     public static event Action OnWallDestroyed;
     [SerializeField] private float health = 100;
-
-  
-    public void DecreaseHealth(float value)
-    {
-        health -= value;
-        CheckHealth();
-    }
-
 
     private void CheckHealth()
     {
@@ -23,5 +15,16 @@ public class WallController : MonoBehaviour
             OnWallDestroyed?.Invoke();
             gameObject.SetActive(false);
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        CheckHealth();
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
     }
 }

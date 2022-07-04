@@ -56,7 +56,7 @@ public class EnemyController : MonoBehaviour
     {
         if (other.CompareTag("Wall") && canAttack)
         {
-            other.GetComponent<WallController>().DecreaseHealth(1f);
+            
             canAttack = false;
         }
 
@@ -114,7 +114,6 @@ public class EnemyController : MonoBehaviour
         var pos = wallPoint.position;
         pos.z = randomZ;
         return pos;
-
     }
 
     private void AttackCooldown()

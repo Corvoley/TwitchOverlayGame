@@ -376,6 +376,70 @@ MonoBehaviour:
   sphereCollider: {fileID: 7277550782869262763}
   damage: 10
   attackDelay: 1
+--- !u!1 &4130280634277268211
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4162908200520009837}
+  - component: {fileID: 8703706295036496186}
+  m_Layer: 13
+  m_Name: SightRadius
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4162908200520009837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4130280634277268211}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6103732200358392906}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8703706295036496186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4130280634277268211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3082d0bb05bea54c8569995aa36b711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  searchRadius: 30
+  targetsInRange:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  targetList: []
+  ClosestTarget: {fileID: 0}
+  DefaultTargetName: Wall_Front
+  IsLookingForTarget: 1
+  UpdateRate: 0.1
 --- !u!1 &4712724636444122818
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,7 +800,7 @@ GameObject:
   - component: {fileID: -3584996985694522097}
   - component: {fileID: -3596006157752697917}
   - component: {fileID: 3955201489058519417}
-  - component: {fileID: 7658178648108295125}
+  - component: {fileID: 5194696473586425571}
   m_Layer: 10
   m_Name: Basic Soldier
   m_TagString: Untagged
@@ -763,6 +827,7 @@ Transform:
   - {fileID: 1155788989523099226}
   - {fileID: 8687568205492681055}
   - {fileID: 1627893084911438137}
+  - {fileID: 4162908200520009837}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -774,7 +839,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6103732200358392907}
   m_Enabled: 0
-  m_AgentTypeID: 0
+  m_AgentTypeID: -334000983
   m_Radius: 1.99
   m_Speed: 20
   m_Acceleration: 10
@@ -836,8 +901,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12db95aad2ce2e541ba21109c48d9d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {x: 0, y: 0, z: 0}
   UpdateRate: 0.1
+  CanMove: 1
 --- !u!114 &3955201489058519417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,8 +922,8 @@ MonoBehaviour:
   attackRadius: {fileID: 8815118500850049163}
   animator: {fileID: -3584996985694522097}
   soldierScriptableObject: {fileID: 11400000, guid: b5dd7c0e959cb7346b822bbd277fdbaf, type: 2}
---- !u!136 &7658178648108295125
-CapsuleCollider:
+--- !u!65 &5194696473586425571
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -866,10 +932,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 2.26
-  m_Height: 8.1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 3.5269542, y: 6.8902497, z: 3.4223561}
+  m_Center: {x: 0.039171934, y: -0.1103065, z: 0.007772386}
 --- !u!1 &6103732200383164038
 GameObject:
   m_ObjectHideFlags: 0

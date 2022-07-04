@@ -6,10 +6,11 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class AIMovement : MonoBehaviour
 {
-    public Transform target;
+    public Vector3 target;
     public float UpdateRate = 0.1f;
     private NavMeshAgent agent;
     private Coroutine FollowCoroutine;
+    public bool CanMove;
 
     private void Awake()
     {
@@ -17,8 +18,10 @@ public class AIMovement : MonoBehaviour
     }
     private void Start()
     {
+        CanMove = true;
         StartChasing();
     }
+
     public void StartChasing()
     {
         if (FollowCoroutine == null)
@@ -32,11 +35,25 @@ public class AIMovement : MonoBehaviour
     }
     private IEnumerator FollowTarget()
     {
+
         WaitForSeconds wait = new WaitForSeconds(UpdateRate);
-        while (enabled)
+        while (CanMove)
         {
-            agent.SetDestination(target.transform.position);
+            if (target == null)
+            {
+                agent.ResetPath();
+            }
+            else
+            {
+                agent.SetDestination(target);
+            }
             yield return wait;
         }
     }
+    private void OnDisable()
+    {
+        FollowCoroutine = null;
+    }
+
+
 }

@@ -43,8 +43,8 @@ public class BaseUnit : PoolableObject, IDamageable
     }
 
     private IEnumerator LookAt(Transform target)
-    {
-        Quaternion lookRotation = Quaternion.LookRotation(target.position - transform.position);
+    {        
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(0, target.position.y, 0) - new Vector3(transform.position.x, transform.position.y, transform.position.z));
         float time = 0;
         while (time < 1)
         {

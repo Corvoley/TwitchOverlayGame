@@ -19,8 +19,8 @@ TagManager:
   - Soldier
   - SoldierAttackRadius
   - Wall
-  - 
-  - 
+  - SoldierSight
+  - EnemySight
   - 
   - 
   - 

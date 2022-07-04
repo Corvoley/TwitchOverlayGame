@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemySpawner : MonoBehaviour
+public class UnitSpawner : MonoBehaviour
 {
     public Transform target;
-    public int numberOfEnemiesToSpawn = 5;
+    public int numberOfUnitsToSpawn = 5;
     public float spawnDelay = 1f;
-    public List<BaseUnit> enemyPrefabs = new List<BaseUnit>();
-    public SpawnMethod enemySpawnMethod = SpawnMethod.RoundRobin;
-    private Dictionary<int, ObjectPool> enemyObjectPools = new Dictionary<int, ObjectPool>();
+    public List<BaseUnit> unitPrefab = new List<BaseUnit>();
+    public SpawnMethod unitSpawnMethod = SpawnMethod.RoundRobin;
+    private Dictionary<int, ObjectPool> unitObjectsPool = new Dictionary<int, ObjectPool>();
     public Transform spawnPostionTransform;
-
+    public KeyCode spawnKey;
     //used for spawn enemies at random positions within navmesh area
     //private NavMeshTriangulation triangulation;
 
-
     private void Awake()
     {
-        for (int i = 0; i < enemyPrefabs.Count; i++)
+        for (int i = 0; i < unitPrefab.Count; i++)
         {
-            enemyObjectPools.Add(i, ObjectPool.CreateInstance(enemyPrefabs[i], numberOfEnemiesToSpawn));
+            unitObjectsPool.Add(i, ObjectPool.CreateInstance(unitPrefab[i], numberOfUnitsToSpawn));
         }
     }
     private void Start()
@@ -30,7 +29,7 @@ public class EnemySpawner : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(spawnKey))
         {
             StartCoroutine(SpawnEnemies());
         }
@@ -40,9 +39,9 @@ public class EnemySpawner : MonoBehaviour
     {
         WaitForSeconds wait = new WaitForSeconds(spawnDelay);
         int spawnedEnemies = 0;
-        while (spawnedEnemies < numberOfEnemiesToSpawn)
+        while (spawnedEnemies < numberOfUnitsToSpawn)
         {
-            if (enemySpawnMethod == SpawnMethod.RoundRobin)
+            if (unitSpawnMethod == SpawnMethod.RoundRobin)
             {
                 SpawnRoundRobinEnemy(spawnedEnemies);
             }
@@ -52,18 +51,18 @@ public class EnemySpawner : MonoBehaviour
     }
     private void SpawnRoundRobinEnemy(int SpawnedEnemies)
     {
-        int SpawnIndex = SpawnedEnemies % enemyPrefabs.Count;
+        int SpawnIndex = SpawnedEnemies % unitPrefab.Count;
 
         DoSpawnEnemy(SpawnIndex);
     }
 
     private void SpawnRandomEnemy()
     {
-        DoSpawnEnemy(Random.Range(0, enemyPrefabs.Count));
+        DoSpawnEnemy(Random.Range(0, unitPrefab.Count));
     }
     private void DoSpawnEnemy(int SpawnIndex)
     {
-        PoolableObject poolableObject = enemyObjectPools[SpawnIndex].GetObject();
+        PoolableObject poolableObject = unitObjectsPool[SpawnIndex].GetObject();
 
         if (poolableObject != null)
         {
@@ -77,7 +76,7 @@ public class EnemySpawner : MonoBehaviour
             BaseUnit enemy = poolableObject.GetComponent<BaseUnit>();
             enemy.agent.Warp(spawnPostionTransform.position);
             //enemy needs to get enabled and start chasing now.
-            enemy.movement.target = target;
+            enemy.movement.target = target.position;
             enemy.agent.enabled = true;
             enemy.movement.StartChasing();
         }

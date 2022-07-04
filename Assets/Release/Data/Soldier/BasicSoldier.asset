@@ -24,6 +24,6 @@ MonoBehaviour:
   BaseOffset: 3.45
   Height: 6.77
   ObstacleAvoidanceType: 1
-  Radius: 0.5
+  Radius: 1.99
   Speed: 20
   StoppingDistance: 6

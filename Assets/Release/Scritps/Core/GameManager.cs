@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
         gameSaver.LoadGame();
 
-        bot.Connect(true);
+        //bot.Connect(true);
     }
 
     private void Update()
