@@ -260,7 +260,7 @@ MonoBehaviour:
     m_Bits: 1024
   targetList: []
   ClosestTarget: {fileID: 0}
-  DefaultTargetName: Wall_Left
+  DefaultTargetName: Wall
   IsLookingForTarget: 1
   UpdateRate: 0.1
 --- !u!1 &6103732199180267423

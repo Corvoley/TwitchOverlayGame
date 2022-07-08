@@ -21,13 +21,20 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        switch (player.job)
+        if (player.collector != null)
+        switch (player.collector.resourceType)
         {
-            case "wood":
+            case Collector.ResourceType.Wood:
                 pointToFollow = GameObject.Find("PointWood").GetComponent<Point>();
                 break;
-            case "food":
+            case Collector.ResourceType.Food:
                 pointToFollow = GameObject.Find("PointFood").GetComponent<Point>();
+                break;
+            case Collector.ResourceType.Gold:
+                pointToFollow = GameObject.Find("PointGold").GetComponent<Point>();
+                break;
+            case Collector.ResourceType.Stone:
+                pointToFollow = GameObject.Find("PointStone").GetComponent<Point>();
                 break;
             default:
                 break;

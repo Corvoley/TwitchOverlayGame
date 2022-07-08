@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
         Application.runInBackground = true; 
         var buy = new BuyItem("buyitem");
         CommandList.commands.Add(buy);
-        var collector = new Collector("collector");
+        var collector = new CollectorJob("c");
         CommandList.commands.Add(collector);        
 
         
@@ -25,16 +25,12 @@ public class GameManager : MonoBehaviour
 
         gameSaver.LoadGame();
 
-        //bot.Connect(true);
+        bot.Connect(true);
     }
 
-    private void Update()
-    {
-        
-    }
     public void SaveGame()
     {
-        gameSaver.SaveGame(new SavePlayerData { PlayerList = PlayerManager.playerList});
+        gameSaver.SavePlayerData(new PlayerData { PlayerList = PlayerManager.playerList});
     }
 
     private void OnDestroy()

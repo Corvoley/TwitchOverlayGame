@@ -5,21 +5,6 @@ using System.Linq;
 using System;
 using TwitchBot.Commands;
 
-public class Player
-{
-    public string id;
-    public string name;
-    public int itens;
-    public string job;
-
-    public Player(string id, string name)
-    {
-        this.id = id;
-        this.name = name;
-    }
-
-}
-
 public class PlayerManager : MonoBehaviour
 {
     public static List<Player> playerList = new List<Player>();
@@ -34,8 +19,8 @@ public class PlayerManager : MonoBehaviour
         TwitchConnection.OnPlayerJoined += AddPlayerToGame;
         GameSaver.OnGameStart += LoadPlayers;
         BuyItem.OnItemBuy += UpdatePlayerInfo;
-        Collector.OnJobChanged += SetJob;
-        InstantiatePlayerPool(20);
+        
+        InstantiatePlayerPool(50);
     }
 
     private void Update()
@@ -102,43 +87,7 @@ public class PlayerManager : MonoBehaviour
         }
 
     }
-    public void SetJob(string id, string job)
-    {
-
-        if (playerList.Exists(x => x.id == id))
-        {
-            Player temp = playerList.FirstOrDefault(x => x.id == id);
-            string currentJob = temp.job;
-            temp.job = job;
-            switch (currentJob)
-            {
-                case "wood":
-                    ResourceManager.woodPlayerList.Remove(temp);
-                    break;
-                case "food":
-                    ResourceManager.foodPlayerList.Remove(temp);
-                    break;
-                default:
-
-                    break;
-            }
-            switch (job)
-            {
-                case "wood":
-                    ResourceManager.woodPlayerList.Add(temp);
-                    break;
-                case "food":
-                    ResourceManager.foodPlayerList.Add(temp);
-                    break;
-                default:
-
-                    break;
-            }
-
-            SavePlayerData();
-        }
-
-    }
+    
 
     public void UpdatePlayerInfo(string id, int value)
     {
@@ -151,7 +100,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void SavePlayerData()
     {
-        gameSaver.SaveGame(new SavePlayerData { PlayerList = playerList });
+        gameSaver.SavePlayerData(new PlayerData { PlayerList = playerList });
     }
 
 }

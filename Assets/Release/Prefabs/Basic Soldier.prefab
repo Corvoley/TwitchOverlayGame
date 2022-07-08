@@ -437,7 +437,7 @@ MonoBehaviour:
     m_Bits: 256
   targetList: []
   ClosestTarget: {fileID: 0}
-  DefaultTargetName: Wall_Front
+  DefaultTargetName: SoldierGatherPoint
   IsLookingForTarget: 1
   UpdateRate: 0.1
 --- !u!1 &4712724636444122818

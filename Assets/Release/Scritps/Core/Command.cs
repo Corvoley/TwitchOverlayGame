@@ -55,14 +55,16 @@ namespace TwitchBot.Commands
     }
 
 
-    public class Collector : Command
+    public class CollectorJob : Command
     {
         public string id;
         public string args;
-        public string job;
-        public static event Action<string, string> OnJobChanged;
+        public string type;
+        public Player.Jobs job;
+        public Collector.ResourceType resourceType;
+        public static event Action<string,Player.Jobs,Collector.ResourceType> OnJobChanged;
 
-        public Collector(string name) : base(name)
+        public CollectorJob(string name) : base(name)
         {
 
         }
@@ -70,15 +72,36 @@ namespace TwitchBot.Commands
         public override void CallFunction()
         {
             id = CommandParametersHandler.param;
-            job = CommandParametersHandler.param3;
-            OnJobChanged?.Invoke(id, job);
+            type = CommandParametersHandler.param3;
+            switch (type)
+            {
+                case "wood":
+                    resourceType = Collector.ResourceType.Wood; 
+                    break;
+                case "food":
+                    resourceType = Collector.ResourceType.Food;
+                    break;
+                case "gold":
+                    resourceType = Collector.ResourceType.Gold;
+                    break;
+                case "stone":
+                    resourceType = Collector.ResourceType.Stone;
+                    break;
+                default:
+                    break;
+            }
+
+            job = Player.Jobs.Collector;
+            
+            OnJobChanged?.Invoke(id, job, resourceType);
+           
 
         }
         public override string GetMessage(string id, string name, string args)
         {
-            if (job == "wood" || job == "food")
+            if (type == "wood" || type == "food" || type == "gold" || type == "stone")
             {
-                return $"{name} mudou sua profissão para {job} collector!";
+                return $"{name} mudou sua profissão para {type} collector!";
             }
             else
             {
