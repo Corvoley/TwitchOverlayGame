@@ -98,9 +98,13 @@ public class PlayerManager : MonoBehaviour
         }
 
     }
-    private void SavePlayerData()
+    public void SavePlayerData()
     {
         gameSaver.SavePlayerData(new PlayerData { PlayerList = playerList });
     }
+
+
+
+
 
 }

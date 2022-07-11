@@ -7,7 +7,6 @@ using System;
 public class PlayerData
 {
     public List<Player> PlayerList = new List<Player>();
-
 }
 public class CollectorData
 {
@@ -48,17 +47,13 @@ public class GameSaver : MonoBehaviour
     public void SavePlayerData(PlayerData saveData)
     {
         CurrentPlayerSave = saveData;
-        SaveGameDataToFile(SavePlayerFilePath, saveData);
-       
+        SaveGameDataToFile(SavePlayerFilePath, saveData);       
     }
     public void SaveCollectorData(CollectorData saveData)
     {
         CurrentCollectorSave = saveData;
         SaveGameDataToFile(SaveCollectorFilePath, saveData);
-
     }
-
-
     public void LoadGame()
     {
         if (IsLoaded)

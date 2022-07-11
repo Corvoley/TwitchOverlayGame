@@ -7,8 +7,11 @@ using UnityEngine;
 
 public class JobManager : MonoBehaviour
 {
-    [SerializeField]private GameSaver gameSaver;
+    [SerializeField] private GameSaver gameSaver;
+    [SerializeField] private PlayerManager playerManager;
     public static List<Collector> collectorsList = new List<Collector>();
+    public static event Action OnCollectorJobSet;
+
 
     private void Awake()
     {
@@ -79,6 +82,10 @@ public class JobManager : MonoBehaviour
             }
 
             SaveCollectorData();
+            playerManager.SavePlayerData();
+
+            OnCollectorJobSet?.Invoke();
+            
         }
 
     }

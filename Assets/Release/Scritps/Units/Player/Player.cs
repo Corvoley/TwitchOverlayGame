@@ -17,11 +17,7 @@ public class Player
     public Player(string id, string name)
     {
         this.id = id;
-        this.name = name;
-        
+        this.name = name;        
     }
-
-
-
 
 }

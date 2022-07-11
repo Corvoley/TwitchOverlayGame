@@ -105,7 +105,7 @@ namespace TwitchBot.Commands
             }
             else
             {
-                return $"{name} por favor escolha entre '!collector wood' ou '!collector food'";
+                return $"{name} por favor escolha entre '!c wood','!c food','!c gold','!c stone'";
             }
             
         }
