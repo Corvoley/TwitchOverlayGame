@@ -54,6 +54,32 @@ namespace TwitchBot.Commands
         }
     }
 
+    public class TrainerJob : Command
+    {
+        public string id;
+        public string args;
+        public string type;
+        public TrainerJob(string name) : base(name)
+        {
+        }
+
+        public override void CallFunction()
+        {
+            base.CallFunction();
+        }
+        public override string GetMessage(string id, string name, string args)
+        {
+            if (type == "w")
+            {
+                return $"{name} mudou sua profissão para {type} treiner!";
+            }
+            else
+            {
+                return $"{name} por favor digite '!t w'";
+            }
+        }
+    }
+
 
     public class CollectorJob : Command
     {
@@ -61,8 +87,8 @@ namespace TwitchBot.Commands
         public string args;
         public string type;
         public Player.Jobs job;
-        public Collector.ResourceType resourceType;
-        public static event Action<string,Player.Jobs,Collector.ResourceType> OnJobChanged;
+        public Enum resourceType;
+        public static event Action<string,Player.Jobs,Enum> OnJobChanged;
 
         public CollectorJob(string name) : base(name)
         {

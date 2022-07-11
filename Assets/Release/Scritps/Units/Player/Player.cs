@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+using System;
 public class Player
 {
     public string id;
@@ -10,14 +7,19 @@ public class Player
    
     public Jobs job;
     public Collector collector;
+    public Trainer trainer;
+    public Enum jobType;
     public enum Jobs
     {
-        Collector
+        Collector = 1,
+        Trainer = 2,
+
     }
     public Player(string id, string name)
     {
         this.id = id;
-        this.name = name;        
+        this.name = name;
+        
     }
 
 }

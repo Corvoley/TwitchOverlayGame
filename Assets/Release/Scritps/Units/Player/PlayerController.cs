@@ -10,14 +10,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Point pointToFollow;
     [SerializeField] private float timeToMove = 2f;
     [SerializeField] private TextMeshProUGUI nameText;
-    private Point woodPoint, foodPoint, goldPoint, stonePoint;
+    private Point woodPoint, foodPoint, goldPoint, stonePoint, barrackPoint;
     public Player player { get; set; }
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         SetPointsOnAwake();
-        JobManager.OnCollectorJobSet += UpdateCollectionPoint;
+        JobManager.OnJobSet += UpdateCollectionPoint;
+        JobManager.OnExpGive += GiveExp;
     }
 
 
@@ -25,6 +26,20 @@ public class PlayerController : MonoBehaviour
     {
         nameText.text = player.name;
         StartCoroutine(StartWalk());
+    }
+    private void GiveExp(int exp)
+    {
+        switch (player.job)
+        {
+            case Player.Jobs.Collector:
+                player.collector.experience += exp;
+                break;
+            case Player.Jobs.Trainer:
+                player.trainer.experience += exp;
+                break;
+            default:
+                break;
+        }
     }
 
     private void SetPointsOnAwake()
@@ -34,28 +49,40 @@ public class PlayerController : MonoBehaviour
         foodPoint = GameObject.Find("PointFood").GetComponent<Point>();
         goldPoint = GameObject.Find("PointGold").GetComponent<Point>();
         stonePoint = GameObject.Find("PointStone").GetComponent<Point>();
+        barrackPoint = GameObject.Find("PointBarrack").GetComponent<Point>();
     }
     private void UpdateCollectionPoint()
     {
-        if (player.collector != null)
-        {          
-            switch (player.collector.resourceType)
+        if (player != null)
+        {
+            switch (player.job)
             {
-                case Collector.ResourceType.Wood:
-                    pointToFollow = woodPoint;
+                case Player.Jobs.Collector:
+                    switch (player.collector.resourceType)
+                    {
+                        case Collector.ResourceType.Wood:
+                            pointToFollow = woodPoint;
+                            break;
+                        case Collector.ResourceType.Food:
+                            pointToFollow = foodPoint;
+                            break;
+                        case Collector.ResourceType.Gold:
+                            pointToFollow = goldPoint;
+                            break;
+                        case Collector.ResourceType.Stone:
+                            pointToFollow = stonePoint;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
-                case Collector.ResourceType.Food:
-                    pointToFollow = foodPoint;
-                    break;
-                case Collector.ResourceType.Gold:
-                    pointToFollow = goldPoint;
-                    break;
-                case Collector.ResourceType.Stone:
-                    pointToFollow = stonePoint;
-                    break;
-                default:
+                case Player.Jobs.Trainer:
+                    pointToFollow = barrackPoint;
+
                     break;
             }
+
+            
         }
     }
     private IEnumerator StartWalk()

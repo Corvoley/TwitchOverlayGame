@@ -7,6 +7,7 @@ using TwitchBot.Commands;
 
 public class PlayerManager : MonoBehaviour
 {
+    public event Action<string, Player.Jobs, Enum> OnPlayerAdded;
     public static List<Player> playerList = new List<Player>();
     public static List<Player> activePlayerList = new List<Player>();
     public static List<Player> inactivePlayerList = new List<Player>();
@@ -18,8 +19,9 @@ public class PlayerManager : MonoBehaviour
     {
         TwitchConnection.OnPlayerJoined += AddPlayerToGame;
         GameSaver.OnGameStart += LoadPlayers;
+        LoadPlayers();
         BuyItem.OnItemBuy += UpdatePlayerInfo;
-        
+
         InstantiatePlayerPool(50);
     }
 
@@ -45,6 +47,8 @@ public class PlayerManager : MonoBehaviour
         if (!playerList.Exists(x => x.id == id))
         {
             Player player = new Player(id, name);
+            Collector collector = new Collector();
+            player.collector = collector;
             playerList.Add(player);
             SavePlayerData();
         }
@@ -56,13 +60,17 @@ public class PlayerManager : MonoBehaviour
         {
             Player temp = playerList.Find(x => x.id == id);
             inactivePlayerList.Add(temp);
+            
+            OnPlayerAdded?.Invoke(temp.id, temp.job, null);
         }
         else
         {
             CreatePlayer(id, name);
             Player temp = playerList.Find(x => x.id == id);
             inactivePlayerList.Add(temp);
+            OnPlayerAdded?.Invoke(temp.id, temp.job, null);
         }
+
 
     }
 
@@ -87,7 +95,7 @@ public class PlayerManager : MonoBehaviour
         }
 
     }
-    
+
 
     public void UpdatePlayerInfo(string id, int value)
     {
