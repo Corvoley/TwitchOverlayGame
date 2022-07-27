@@ -8,18 +8,12 @@ public class PlayerData
 {
     public List<Player> PlayerList = new List<Player>();
 }
-public class CollectorData
-{
-    public List<Collector> CollectorList = new List<Collector>();
-}
 
 public class GameSaver : MonoBehaviour
 {
     public static event Action OnGameStart;
     private string SavePlayerFilePath => $"D:/Unity/TwitchProject/Players.json";
-    private string SaveCollectorFilePath => $"D:/Unity/TwitchProject/Collector.json";
     public static PlayerData CurrentPlayerSave { get; private set; }
-    public static CollectorData CurrentCollectorSave { get; private set; }
     private bool IsLoaded => CurrentPlayerSave != null;
 
     private void SaveGameDataToFile(string filePath, System.Object data)
@@ -49,11 +43,6 @@ public class GameSaver : MonoBehaviour
         CurrentPlayerSave = saveData;
         SaveGameDataToFile(SavePlayerFilePath, saveData);       
     }
-    public void SaveCollectorData(CollectorData saveData)
-    {
-        CurrentCollectorSave = saveData;
-        SaveGameDataToFile(SaveCollectorFilePath, saveData);
-    }
     public void LoadGame()
     {
         if (IsLoaded)
@@ -61,8 +50,7 @@ public class GameSaver : MonoBehaviour
             return;
         }
 
-        CurrentPlayerSave = LoadGameDataFromFile<PlayerData>(SavePlayerFilePath) ?? new PlayerData();
-        CurrentCollectorSave = LoadGameDataFromFile<CollectorData>(SaveCollectorFilePath) ?? new CollectorData();
+        CurrentPlayerSave = LoadGameDataFromFile<PlayerData>(SavePlayerFilePath) ?? new PlayerData();    
         OnGameStart?.Invoke();
 
     }

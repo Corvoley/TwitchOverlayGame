@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Point pointToFollow;
     [SerializeField] private float timeToMove = 2f;
     [SerializeField] private TextMeshProUGUI nameText;
-    private Point woodPoint, foodPoint, goldPoint, stonePoint, barrackPoint;
+    private Point spawnPoint, woodPoint, foodPoint, goldPoint, stonePoint, barrackPoint;
     public Player player { get; set; }
 
     private void Awake()
@@ -44,15 +44,17 @@ public class PlayerController : MonoBehaviour
 
     private void SetPointsOnAwake()
     {
-        pointToFollow = GameObject.Find("Point").GetComponent<Point>();
+        spawnPoint = GameObject.Find("Point").GetComponent<Point>();
         woodPoint = GameObject.Find("PointWood").GetComponent<Point>();
         foodPoint = GameObject.Find("PointFood").GetComponent<Point>();
         goldPoint = GameObject.Find("PointGold").GetComponent<Point>();
         stonePoint = GameObject.Find("PointStone").GetComponent<Point>();
         barrackPoint = GameObject.Find("PointBarrack").GetComponent<Point>();
+        pointToFollow = spawnPoint;
     }
     private void UpdateCollectionPoint()
     {
+        Debug.Log("PointUpdated");
         if (player != null)
         {
             switch (player.job)
@@ -78,9 +80,12 @@ public class PlayerController : MonoBehaviour
                     break;
                 case Player.Jobs.Trainer:
                     pointToFollow = barrackPoint;
-
+                    break;
+                default:
+                    pointToFollow = spawnPoint;
                     break;
             }
+
 
             
         }

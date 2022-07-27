@@ -48,7 +48,9 @@ public class PlayerManager : MonoBehaviour
         {
             Player player = new Player(id, name);
             Collector collector = new Collector();
+            Trainer trainer = new Trainer();
             player.collector = collector;
+            player.trainer = trainer;            
             playerList.Add(player);
             SavePlayerData();
         }

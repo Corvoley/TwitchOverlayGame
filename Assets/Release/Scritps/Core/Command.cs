@@ -59,13 +59,28 @@ namespace TwitchBot.Commands
         public string id;
         public string args;
         public string type;
+        public Player.Jobs job;
+        public Enum soldierType;
+        public static event Action<string, Player.Jobs, Enum> OnJobChanged;
         public TrainerJob(string name) : base(name)
         {
         }
 
         public override void CallFunction()
         {
-            base.CallFunction();
+            id = CommandParametersHandler.param;
+            type = CommandParametersHandler.param3;
+            switch (type)
+            {
+                case "w":
+                    soldierType = Trainer.SoldierType.Warrior;
+                    break;
+            
+                default:
+                    break;
+            }
+            job = Player.Jobs.Trainer;
+            OnJobChanged?.Invoke(id, job, soldierType);
         }
         public override string GetMessage(string id, string name, string args)
         {

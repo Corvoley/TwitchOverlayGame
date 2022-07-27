@@ -8,15 +8,15 @@ using UnityEngine;
 public class JobManager : MonoBehaviour
 {
     [SerializeField] private PlayerManager playerManager;
-    public static List<Collector> collectorsList = new List<Collector>();
     public static event Action OnJobSet;
     public static event Action<int> OnExpGive;
-    private Player player;
+    private Player player;  
 
 
     private void Awake()
     {
         CollectorJob.OnJobChanged += SetJob;
+        TrainerJob.OnJobChanged += SetJob;
         playerManager.OnPlayerAdded += SetJob;
 
     }
@@ -25,24 +25,28 @@ public class JobManager : MonoBehaviour
     {
         if (PlayerManager.playerList.Exists(x => x.id == id))
         {
-            player = PlayerManager.playerList.FirstOrDefault(x => x.id == id);
-            var currentJob = player.job;
-            switch (currentJob)
+            player = PlayerManager.playerList.FirstOrDefault(x => x.id == id);            
+            player.job = job;
+            switch (job)
             {
                 case Player.Jobs.Collector:
-                    SetCollectorJob(id, player.job, player.collector.resourceType);
+                    ClearCurrentTrainerJob();
+                    SetCollectorJob(jobType == null ? player.collector.resourceType : jobType);
 
                     break;
                 case Player.Jobs.Trainer:
-
+                    ClearCurrentCollectorJob();
+                    SetTrainerJob(jobType == null ? player.trainer.soldierType : jobType);
 
                     break;
                 default:
                     break;
             }
         }
-        playerManager.SavePlayerData(); 
+        Debug.Log("antes da call");
         OnJobSet?.Invoke();
+        Debug.Log("despois da call");
+        playerManager.SavePlayerData(); 
 
     }
 
@@ -70,31 +74,49 @@ public class JobManager : MonoBehaviour
     }
 
 
-    public void SetCollectorJob(string id, Player.Jobs job, Enum jobType)
-    {      
-        
-        Collector.ResourceType currentType = (Collector.ResourceType)jobType;
-        
-        player.collector.resourceType = (Collector.ResourceType)jobType;
-        switch (currentType)
+    public void SetTrainerJob(Enum jobType)
+    {
+        Trainer.SoldierType currentType = (Trainer.SoldierType)jobType;
+        player.trainer.soldierType = currentType;   
+        ClearCurrentTrainerJob();
+
+        switch (jobType)
         {
-            case Collector.ResourceType.Wood:
-                ResourceManager.woodPlayerList.Remove(player);
+            case Trainer.SoldierType.Warrior:
+                TrainerManager.warriorList.Add(player);
                 break;
-            case Collector.ResourceType.Food:
-                ResourceManager.foodPlayerList.Remove(player);
-                break;
-            case Collector.ResourceType.Gold:
-                ResourceManager.goldPlayerList.Remove(player);
-                break;
-            case Collector.ResourceType.Stone:
-                ResourceManager.stonePlayerList.Remove(player);
+            case Trainer.SoldierType.Archer:
+                TrainerManager.archerList.Add(player);
                 break;
             default:
-
                 break;
         }
-        switch (jobType)
+
+    }
+    private void ClearCurrentTrainerJob()
+    {
+        Trainer.SoldierType currentType = player.trainer.soldierType;
+        switch (currentType)
+        {
+            case Trainer.SoldierType.Warrior:
+                TrainerManager.warriorList.Remove(player);
+                break;
+            case Trainer.SoldierType.Archer:
+                TrainerManager.archerList.Remove(player);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    public void SetCollectorJob(Enum jobType)
+    {
+        Collector.ResourceType currentType = (Collector.ResourceType)jobType;
+        ClearCurrentCollectorJob();        
+        player.collector.resourceType = currentType;
+
+        switch (currentType)
         {
             case Collector.ResourceType.Wood:
                 ResourceManager.woodPlayerList.Add(player);
@@ -113,6 +135,30 @@ public class JobManager : MonoBehaviour
                 break;
         }
              
+
+    }
+
+    private void ClearCurrentCollectorJob()
+    {
+        Collector.ResourceType currentType = player.collector.resourceType;
+        switch (currentType)
+        {
+            case Collector.ResourceType.Wood:
+                ResourceManager.woodPlayerList.Remove(player);
+                break;
+            case Collector.ResourceType.Food:
+                ResourceManager.foodPlayerList.Remove(player);
+                break;
+            case Collector.ResourceType.Gold:
+                ResourceManager.goldPlayerList.Remove(player);
+                break;
+            case Collector.ResourceType.Stone:
+                ResourceManager.stonePlayerList.Remove(player);
+                break;
+            default:
+
+                break;
+        }
 
     }
 

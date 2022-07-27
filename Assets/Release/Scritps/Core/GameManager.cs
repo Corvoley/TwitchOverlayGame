@@ -16,9 +16,10 @@ public class GameManager : MonoBehaviour
         var buy = new BuyItem("buyitem");
         CommandList.commands.Add(buy);
         var collector = new CollectorJob("c");
-        CommandList.commands.Add(collector);        
+        CommandList.commands.Add(collector);
+        var trainer = new TrainerJob("t");
+        CommandList.commands.Add(trainer);
 
-        
         gameSaver = GetComponent<GameSaver>();
         bot = GetComponent<TwitchConnection>();
 
